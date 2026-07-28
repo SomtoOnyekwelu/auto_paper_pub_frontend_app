@@ -20,6 +20,16 @@ const { tags } = Astro.props;
 const authors = tags.citation_author;
 const orcids = tags.citation_author_orcid;
 const institutions = tags.citation_author_institution;
+// citation_pdf_url ships LOCAL-LOOKING (/journals/.../galley.pdf) so the
+// browser-facing URL stays in the same subdirectory (Google Scholar rule).
+// But Highwire requires the tag content to be ABSOLUTE — per
+// https://scholar.google.com/intl/en/scholar/inclusion.html. The single
+// source of truth for the domain is `site:` in astro.config.mjs (Astro.site).
+// Hand-Sanitizer: derive at render time, never hardcode "https://amssrn.org".
+const siteOrigin = Astro.site?.origin ?? '';
+const absolutePdfUrl = siteOrigin
+  ? new URL(tags.citation_pdf_url, siteOrigin).href
+  : tags.citation_pdf_url;
 ---
 <meta name="citation_title" content={tags.citation_title} />
 <meta name="citation_journal_title" content={tags.citation_journal_title} />
@@ -30,7 +40,7 @@ const institutions = tags.citation_author_institution;
 <meta name="citation_lastpage" content={tags.citation_lastpage} />
 <meta name="citation_publication_date" content={tags.citation_publication_date} />
 <meta name="citation_doi" content={tags.citation_doi} />
-<meta name="citation_pdf_url" content={tags.citation_pdf_url} />
+<meta name="citation_pdf_url" content={absolutePdfUrl} />
 <meta name="citation_abstract" content={tags.citation_abstract} />
 {tags.citation_keywords.map((kw) => (
   <meta name="citation_keywords" content={kw} />

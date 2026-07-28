@@ -15,3 +15,17 @@
   --font-serif: 'Merriweather', serif;
   --font-sans: 'Inter', sans-serif;
 }
+
+/* -----------------------------------------------------------
+   Tailwind v4 needs EXPLICIT @source directives to know where
+   to scan for class usage. Without these, @tailwindcss/vite
+   produced a near-empty CSS for this Astro project (only ~1
+   utility class detected), so every text-4xl / font-serif /
+   max-w-prose / .prose / hover-underline / bg-[var(...)]
+   was MISSING and pages rendered as browser-default plain text.
+   Declared once here — the Hand-Sanitizer.
+   ----------------------------------------------------------- */
+@source "../**/*.{astro,html,ts,tsx,js,jsx,md}";
+@source "../components/**/*.{astro}";
+@source "../layouts/**/*.{astro}";
+@source "../pages/**/*.{astro}";

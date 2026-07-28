@@ -11,6 +11,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://amssrn.org',
   output: 'static',
+  compressHTML: false, // human-readable output for review/debug (Part 4B); negligible size cost
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

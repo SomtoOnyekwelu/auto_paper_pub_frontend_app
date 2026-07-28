@@ -1,0 +1,11 @@
+# Cloudflare Pages Edge Rewrite Rules
+# Per Part 11 §6 + Part 1.0 Open Question (Vision Trigger resolved for Cloudflare).
+# The PDF galley local-looking URL (/journals/:initials/:slug/galley.pdf) is silently
+# proxied to Supabase Storage at the edge; the frontend only renders the local-looking
+# href, the rewrite resolves it. The browser-crawler never leaves the same subdirectory
+# (Part 10 Google Scholar rule satisfied), Git stays clean (no binaries tracked).
+#
+# REPLACE [your-supabase-project] with the actual Supabase project reference at
+# deploy time. If the splat pattern below fails to resolve nested segments at the
+# Cloudflare Pages edge, fall back to a minimal Worker (~5 lines, see challenge 1.2).
+/journals/:initials/:slug/galley.pdf  https://[your-supabase-project].supabase.co/storage/v1/object/public/galleys/:initials/:slug.pdf  200

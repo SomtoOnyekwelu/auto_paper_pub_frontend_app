@@ -38,7 +38,7 @@ const pdfHref = pdfUrl(paper.journal_initials, paper.slug);
 const archiveHref = `/journals/${paper.journal_initials}/`;
 ---
 <Layout journalInitials={paper.journal_initials} title={paper.title} description={highwire.citation_abstract}>
-  <SeoHead tags={highwire} />
+  <SeoHead slot="head" tags={highwire} />
   <main class="max-w-prose mx-auto px-6 py-12">
     <a href={archiveHref} class="text-sm text-gray-500 hover:underline">{journal.name}</a>
 

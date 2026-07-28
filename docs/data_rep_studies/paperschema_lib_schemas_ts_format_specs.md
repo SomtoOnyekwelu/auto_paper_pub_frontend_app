@@ -1,0 +1,28 @@
+# Data Representation Study — `paperSchema` (Format Specifications)
+
+File: `src/lib/schemas.ts`.
+Purpose: enforce every JSON shape that crosses the build boundary. Build halts on the first violation with the offending field named (Zero-Tolerance Tier 1).
+
+## Exact Format Specifications
+
+| Field                                                | Regex / format                                                                                              | Valid sample                                 | Invalid sample                                  |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------|-------------------------------------------------|
+| `journal_initials` (paper & journal)                 | `^[a-z]+$`                                                                                                  | `grjbm`                                      | `GRJBM`, `grjbm_`                               |
+| `slug`                                               | `^[0-9]+(-[a-z0-9][a-z0-9-]*)?$` — numeric id and optional kebab body (inner hyphens allowed)               | `8492-monetary-policy-finance`, `8492`       | `effect-of-monetary-policy-…` (no leading id)  |
+| `paper_id`                                           | positive integer ≥ 1                                                                                         | `8492`                                       | `0`, `-1.5`                                     |
+| `title`                                              | non-empty string (min 1)                                                                                     | `Effect of Monetary Policy on Financial …`   | `""`                                            |
+| `authors[]` length                                   | ≥ 1                                                                                                          | `[ … ]`                                      | `[]`                                            |
+| `author.name`                                        | non-empty string                                                                                             | `Onuoha, Donatus`                            | `""`                                            |
+| `author.author_slug`                                | non-empty string                                                                                             | `f4a2b1c9-donatus-onuoha`                    | `""`                                            |
+| `author.orcid`                                       | `^https:\/\/orcid\.org\/\d{4}-\d{4}-\d{4}-\d{3}[\dX]$`                                                       | `https://orcid.org/0000-0002-1825-0097`      | `0000-0002-1825-0097`                          |
+| `author.affiliation`                                | non-empty string                                                                                             | `ESUT, Enugu State`                          | `""`                                            |
+| `highwire.citation_title`                           | non-empty string                                                                                             | (verbatim)                                   | `""`                                            |
+| `highwire.citation_journal_title`                   | non-empty string                                                                                             | (verbatim)                                   | `""`                                            |
+| `highwire.citation_issn`                            | `^\d{4}-\d{3}[\dX]$`                                                                                         | `2811-1745`                                  | `28111745`                                     |
+| `highwire.citation_volume`, `_issue`, `_firstpage`, `_lastpage` | non-empty string                                                                                   | (verbatim)                                   | `""`                                            |
+| `highwire.citation_publication_date`                | `^\d{4}\/\d{1,2}\/\d{1,2}$` — `YYYY/M/D`, NEVER ISO                                                         | `2026/7/20`                                  | `2026-07-20`                                    |
+| `highwire.citation_doi`                             | `^10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+$` — raw prefix only, no `https://` (lowercase accepted; corpus bug fixed) | `10.1234/grjbm.v6i2.102`                     | `https://doi.org/10.1234/grjbm.v6i2.102`       |
+| `highwire.citation_pdf_url`                         | `^\/journals\/[a-z]+\/[0-9a-z-]+\/galley\.pdf$` — local-looking; absolute derivation happens at render time | `/journals/grjbm/8492-monetary-policy-finance/galley.pdf` | `https://supabase.host/galley.pdf` |
+| `highwire.citation_abstract`                        | non-empty string                                                                                             | (verbatim)                                   | `""`                                            |
+| `highwire.citation_keywords[]`                      | array of non-empty strings, ≥ 1 item                                                                          | `["Monetary Policy", "Finance"]`            | `[]`                                            |
+| `highwire.citation_author[]`                        | array of non-empty strings, ≥ 1 item, length = `authors.length` (parallel-arrays invariant)                  | 2-item array for
