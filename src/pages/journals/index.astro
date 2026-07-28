@@ -1,0 +1,36 @@
+---
+/**
+ * ====================================================================
+ * CHALLENGE SPACE: Journal Directory (Challenge 1.1)
+ * ====================================================================
+ * PURPOSE: /journals/ — list all founding journals (name, ISSN print+online)
+ *   with plain <a> links to each archive. Crawler entry point.
+ * INCLUSION CRITERION: this single index page.
+ * EXCLUSION: article pages, archive pages, author pages.
+ * DEPENDENCY RULE: lib/journals, utils/papers (URL helpers).
+ * ====================================================================
+ */
+import Layout from '../../layouts/Layout.astro';
+import { journals } from '../../lib/journals';
+import { journalArchiveUrl } from '../../utils/papers';
+---
+<Layout title="Journals — AMSSRN" description="Directory of AMSSRN academic journals.">
+  <main class="max-w-3xl mx-auto px-6 py-12">
+    <h1 class="text-3xl font-bold font-serif mb-8">Journals</h1>
+    <ul class="space-y-6">
+      {journals.map((j) => (
+        <li>
+          <a href={journalArchiveUrl(j.initials)} class="block group">
+            <h2 class="text-xl font-sans font-semibold text-[var(--color-primary)] group-hover:underline">
+              {j.name}
+            </h2>
+            <p class="text-sm uppercase tracking-wide text-gray-500 mt-1">
+              ISSN {j.issn_print} (print) · {j.issn_online} (online)
+            </p>
+            <p class="mt-2 text-gray-700">{j.description}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>

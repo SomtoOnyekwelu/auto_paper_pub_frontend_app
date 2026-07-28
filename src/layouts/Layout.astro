@@ -1,0 +1,48 @@
+---
+/**
+ * ====================================================================
+ * CHALLENGE SPACE: Layout — per-journal CSS variable injection
+ * ====================================================================
+ * PURPOSE: Wrap every page in a valid HTML shell and inject the
+ *   active journal's CSS variables into <head>, so font-serif/
+ *   font-sans/color-primary utilities resolve to per-tenant values.
+ *   The Hand-Sanitizer for multi-tenant theming (Part 5/8): a
+ *   <style> block + data, no JS theme switcher.
+ * INCLUSION CRITERIA: <html>/<head>/<body> shell + :root injection.
+ * EXCLUSION CRITERIA: Highwire meta (SeoHead), article content.
+ * DEPENDENCY RULE: lib/themes.astro (getTheme/DEFAULT_THEME).
+ * ====================================================================
+ */
+import '../styles/global.css';
+import { getTheme, DEFAULT_THEME, type Theme } from '../lib/themes';
+
+interface Props {
+  /** initials of the active journal; omit for org-level pages */
+  journalInitials?: string;
+  title: string;
+  description?: string;
+}
+const { journalInitials, title, description } = Astro.props;
+const theme: Theme = journalInitials ? getTheme(journalInitials) : DEFAULT_THEME;
+// Astro does NOT interpolate {expr} inside <style> text. The correct pattern
+// for dynamic per-page CSS is `is:inline` (keep inline, don't hoist/extract)
+// + `set:html` (render a raw string as the element's innerHTML). This is the
+// Hand-Sanitizer for multi-tenant theming (Part 5/8): data → :root vars.
+const cssVarsCss = `:root{${Object.entries(theme.css_variables)
+  .map(([k, v]) => `${k}:${v}`)
+  .join(';')}}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <style is:inline set:html={cssVarsCss} />
+  </head>
+  <body class="min-h-screen bg-white text-gray-900 font-sans antialiased">
+    <slot />
+  </body>
+</html>

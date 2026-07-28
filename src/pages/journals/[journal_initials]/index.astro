@@ -1,0 +1,66 @@
+---
+/**
+ * ====================================================================
+ * CHALLENGE SPACE: Journal Archive (Challenge 1.1)
+ * ====================================================================
+ * PURPOSE: /journals/[journal_initials]/ — list ONLY this journal's
+ *   papers. Strict filter by journal_initials (no leakage). Plain <a>.
+ * INCLUSION CRITERION: this single archive page + getStaticPaths.
+ * EXCLUSION: directory page, article page, author pages.
+ * DEPENDENCY RULE: lib/journals, content collection, utils/papers.
+ * ====================================================================
+ */
+import Layout from '../../../layouts/Layout.astro';
+import { getJournal, journals } from '../../../lib/journals';
+import { getCollection } from 'astro:content';
+import type { Paper } from '../../../lib/schemas';
+import { articleUrl } from '../../../utils/papers';
+
+export async function getStaticPaths() {
+  return journals.map((j) => ({ params: { journal_initials: j.initials } }));
+}
+
+const { journal_initials } = Astro.params;
+const journal = getJournal(journal_initials!);
+const all = await getCollection('papers');
+const papers = all
+  .filter((e) => e.data.journal_initials === journal_initials)
+  // newest first by publication date (YYYY/M/D sorts lexically)
+  .sort((a, b) => b.data.highwire_tags.citation_publication_date.localeCompare(a.data.highwire_tags.citation_publication_date));
+---
+<Layout journalInitials={journal_initials} title={`${journal.name} — Archive`} description={journal.description}>
+  <main class="max-w-3xl mx-auto px-6 py-12">
+    <a href="/journals/" class="text-sm text-gray-500 hover:underline">← All journals</a>
+    <h1 class="text-3xl font-bold font-serif mt-4 mb-2">{journal.name}</h1>
+    <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">
+      ISSN {journal.issn_print} (print) · {journal.issn_online} (online)
+    </p>
+    <p class="text-gray-700 mb-8">{journal.description}</p>
+
+    <h2 class="text-xl font-sans font-semibold mb-4">Articles</h2>
+    {papers.length === 0 ? (
+      <p class="text-gray-500">No articles published yet.</p>
+    ) : (
+      <ul class="space-y-5">
+        {papers.map((p) => {
+          const paper: Paper = p.data;
+          return (
+            <li>
+              <a href={articleUrl(paper.journal_initials, paper.slug)} class="block group">
+                <h3 class="text-lg font-serif font-semibold text-[var(--color-primary)] group-hover:underline">
+                  {paper.title}
+                </h3>
+                <p class="text-sm text-gray-600 mt-1">
+                  {paper.authors.map((a) => a.name).join(', ')}
+                </p>
+                <p class="text-xs uppercase tracking-wide text-gray-400 mt-1">
+                  Vol. {paper.highwire_tags.citation_volume}, Issue {paper.highwire_tags.citation_issue} · {paper.highwire_tags.citation_publication_date}
+                </p>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </main>
+</Layout>

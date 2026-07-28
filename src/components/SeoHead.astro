@@ -1,0 +1,46 @@
+---
+/**
+ * ====================================================================
+ * CHALLENGE SPACE: SeoHead — Highwire Press meta injection
+ * ====================================================================
+ * PURPOSE: Emit exhaustive Highwire Press meta tags in <head> for
+ *   Google Scholar indexing, with strict format adherence (Part 10):
+ *   - citation_publication_date as YYYY/M/D (NOT ISO)
+ *   - one <meta> per author, ORCID, and institution (never comma-joined)
+ *   - citation_doi as raw prefix (no https://)
+ *   - citation_pdf_url verbatim (the Edge Proxy resolves it)
+ * INCLUSION CRITERIA: <meta> tag rendering from highwire_tags.
+ * EXCLUSION CRITERIA: Visible body content, CSS theming, routing.
+ * DEPENDENCY RULE: lib/schemas (Highwire type). No page imports.
+ * ====================================================================
+ */
+import type { Highwire } from '../lib/schemas';
+interface Props { tags: Highwire }
+const { tags } = Astro.props;
+const authors = tags.citation_author;
+const orcids = tags.citation_author_orcid;
+const institutions = tags.citation_author_institution;
+---
+<meta name="citation_title" content={tags.citation_title} />
+<meta name="citation_journal_title" content={tags.citation_journal_title} />
+<meta name="citation_issn" content={tags.citation_issn} />
+<meta name="citation_volume" content={tags.citation_volume} />
+<meta name="citation_issue" content={tags.citation_issue} />
+<meta name="citation_firstpage" content={tags.citation_firstpage} />
+<meta name="citation_lastpage" content={tags.citation_lastpage} />
+<meta name="citation_publication_date" content={tags.citation_publication_date} />
+<meta name="citation_doi" content={tags.citation_doi} />
+<meta name="citation_pdf_url" content={tags.citation_pdf_url} />
+<meta name="citation_abstract" content={tags.citation_abstract} />
+{tags.citation_keywords.map((kw) => (
+  <meta name="citation_keywords" content={kw} />
+))}
+{authors.map((a, i) => (
+  <meta name="citation_author" content={a} />
+))}
+{orcids.map((o) => (
+  <meta name="citation_author_orcid" content={o} />
+))}
+{institutions.map((inst) => (
+  <meta name="citation_author_institution" content={inst} />
+))}

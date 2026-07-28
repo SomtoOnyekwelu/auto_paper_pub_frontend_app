@@ -1,0 +1,83 @@
+---
+/**
+ * ====================================================================
+ * CHALLENGE SPACE: Article Landing Page (Challenge 1.0)
+ * ====================================================================
+ * PURPOSE: /journals/[journal_initials]/[slug]/ — render ONE paper for
+ *   humans AND the Google Scholar crawler. Build-time validated;
+ *   exhaustive Highwire meta; visible serif abstract; PDF download.
+ * INCLUSION CRITERION: getStaticPaths + article page.
+ * EXCLUSION: archive, directory, author pages.
+ * DEPENDENCY RULE: content collection, lib/journals, lib/themes,
+ *   utils/papers, components/SeoHead, layouts/Layout.
+ * ====================================================================
+ */
+import Layout from '../../../layouts/Layout.astro';
+import SeoHead from '../../../components/SeoHead.astro';
+import { getJournal, journals } from '../../../lib/journals';
+import { getCollection } from 'astro:content';
+import { articleUrl, pdfUrl } from '../../../utils/papers';
+import type { Paper } from '../../../lib/schemas';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('papers');
+  return papers.map((e) => {
+    const paper: Paper = e.data;
+    return {
+      params: { journal_initials: paper.journal_initials, slug: paper.slug },
+      props: { paper },
+    };
+  });
+}
+
+const { paper } = Astro.props as { paper: Paper };
+const journal = getJournal(paper.journal_initials);
+const highwire = paper.highwire_tags;
+const fullAuthors = paper.authors;
+const pdfHref = pdfUrl(paper.journal_initials, paper.slug);
+const archiveHref = `/journals/${paper.journal_initials}/`;
+---
+<Layout journalInitials={paper.journal_initials} title={paper.title} description={highwire.citation_abstract}>
+  <SeoHead tags={highwire} />
+  <main class="max-w-prose mx-auto px-6 py-12">
+    <a href={archiveHref} class="text-sm text-gray-500 hover:underline">{journal.name}</a>
+
+    {/* Visual fallback hierarchy (Part 10 §4): h1 title > h2 "Abstract" section
+        > h3 author names > small-uppercase journal line. Authors are h3 (not
+        spans) so Google Scholar's fallback parser identifies them as headings,
+        slightly smaller than the title but larger than body text. */}
+    <h1 class="text-4xl font-bold font-serif mt-3 mb-1">{paper.title}</h1>
+    <p class="text-sm uppercase tracking-wide text-gray-500 mb-4">
+      {journal.name} · Vol. {highwire.citation_volume}, Issue {highwire.citation_issue}, pp. {highwire.citation_firstpage}–{highwire.citation_lastpage} · {highwire.citation_publication_date}
+    </p>
+
+    {fullAuthors.map((a) => (
+      <h3 class="text-lg font-sans font-semibold leading-snug">
+        {a.name}
+        <a href={a.orcid} class="text-sm text-[var(--color-primary)] hover:underline font-normal" target="_blank" rel="noopener noreferrer">{a.orcid}</a>
+        <span class="text-sm text-gray-500 font-normal">· {a.affiliation}</span>
+      </h3>
+    ))}
+
+    {/* Abstract MUST be visible in <body> (Part 10 §3), serif, max-w-prose */}
+    <h2 class="text-xl font-sans font-semibold mt-8 mb-2">Abstract</h2>
+    <div class="prose prose-lg max-w-none font-serif">
+      {highwire.citation_abstract.split('\n\n').map((para) => (
+        <p class="font-serif">{para}</p>
+      ))}
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      {highwire.citation_keywords.map((kw) => (
+        <span class="text-xs uppercase tracking-wide bg-gray-100 text-gray-600 px-2 py-1 rounded">{kw}</span>
+      ))}
+    </div>
+
+    <div class="mt-8">
+      <a href={pdfHref}
+         class="inline-flex items-center gap-2 rounded-md bg-[var(--color-primary)] text-white px-5 py-3 font-sans font-semibold hover:opacity-90">
+        Download PDF
+      </a>
+    </div>
+  </main>
+</Layout>

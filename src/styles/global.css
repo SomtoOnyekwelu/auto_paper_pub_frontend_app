@@ -1,0 +1,17 @@
+/* Tailwind v4 — no tailwind.config.mjs; config lives here via @theme. */
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Self-hosted fonts via @fontsource (no Google Fonts network call). */
+@import "@fontsource/merriweather/400.css";
+@import "@fontsource/merriweather/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/lora/400.css";
+@import "@fontsource/lora/700.css";
+
+/* Default theme — overridden per-page by Layout's :root injection. */
+@theme {
+  --font-serif: 'Merriweather', serif;
+  --font-sans: 'Inter', sans-serif;
+}
