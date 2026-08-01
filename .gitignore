@@ -29,3 +29,6 @@ pnpm-debug.log*
 # are excluded so older clones cannot re-introduce a space-laden path.
 teachings-to-agent/
 "teachings to agent/"
+
+# Remove tracking of claude worktrees, to avoid cloudflare clone repo error of "fatal: No url found for submodule path ...' in .gitmodules"
+".claude/worktrees/"
