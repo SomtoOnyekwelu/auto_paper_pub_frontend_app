@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Teaching corpus — local-only. Per the product owner directive this
+# folder MUST NOT appear on the public deployment. Renamed 2026-07
+# from "teachings to agent" (with spaces) to kebab-case; both spellings
+# are excluded so older clones cannot re-introduce a space-laden path.
+teachings-to-agent/
+"teachings to agent/"
