@@ -7,8 +7,12 @@ compatibility_date = "2026-07-29"
 # URL by functions/journals/[journal_initials]/[slug]/galley.pdf.ts (the edge
 # proxy — Google Scholar same-subdirectory rule). The backend uploads the galley
 # to this bucket via the authenticated wrangler CLI (key: <initials>/<slug>.pdf).
+#
+# NOTE (2026-08-07): there is deliberately NO [env.production] section. A bare
+# [env.production] with no bindings would give production an EMPTY environment —
+# env.GALLEYS would be undefined and every galley download would throw a
+# Workers error. Top-level bindings apply to ALL environments (prod + preview).
 [[r2_buckets]]
 binding = "GALLEYS"
 bucket_name = "for-paper-pub-system"
 
-[env.production]

@@ -33,3 +33,5 @@ teachings-to-agent/
 
 # Remove tracking of claude worktrees, to avoid cloudflare clone repo error of "fatal: No url found for submodule path ...' in .gitmodules"
 ".claude/worktrees/"
+.wrangler/
+_worker.bundle
