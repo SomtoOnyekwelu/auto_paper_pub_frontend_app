@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://amssrn.org/sitemap-index.xml
+Sitemap: https://amssr.org/sitemap-index.xml

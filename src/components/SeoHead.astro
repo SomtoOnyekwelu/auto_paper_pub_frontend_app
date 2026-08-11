@@ -25,7 +25,7 @@ const institutions = tags.citation_author_institution;
 // But Highwire requires the tag content to be ABSOLUTE — per
 // https://scholar.google.com/intl/en/scholar/inclusion.html. The single
 // source of truth for the domain is `site:` in astro.config.mjs (Astro.site).
-// Hand-Sanitizer: derive at render time, never hardcode "https://amssrn.org".
+// Hand-Sanitizer: derive at render time, never hardcode "https://amssr.org".
 const siteOrigin = Astro.site?.origin ?? '';
 const absolutePdfUrl = siteOrigin
   ? new URL(tags.citation_pdf_url, siteOrigin).href

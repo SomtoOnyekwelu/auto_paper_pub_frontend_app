@@ -62,10 +62,10 @@ assert(existsSync(sitemapPath), 'sitemap-0.xml exists in dist/');
 
 const sitemap = existsSync(sitemapPath) ? readFileSync(sitemapPath, 'utf-8') : '';
 for (const url of [
-  'https://amssrn.org/journals/',
-  'https://amssrn.org/journals/grjbm/',
-  'https://amssrn.org/journals/grjbm/8492-monetary-policy-finance/',
-  'https://amssrn.org/journals/grjesd/1045-fiscal-policy-social-progress/',
+  'https://amssr.org/journals/',
+  'https://amssr.org/journals/grjbm/',
+  'https://amssr.org/journals/grjbm/8492-monetary-policy-finance/',
+  'https://amssr.org/journals/grjesd/1045-fiscal-policy-social-progress/',
 ]) assert(sitemap.includes(url), `sitemap includes: ${url}`);
 
 console.log('\n[3] robots.txt present and permissive...');

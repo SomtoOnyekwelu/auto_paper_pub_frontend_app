@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
 // NOTE: framework is Astro 7 (installed), not the brief's "Astro v5"; SSG /
 // Content-Layer / Zod APIs are stable across 5→7.
 export default defineConfig({
-  site: 'https://amssrn.org',
+  site: 'https://amssr.org',
   output: 'static',
   compressHTML: false, // human-readable output for review/debug (Part 4B); negligible size cost
   integrations: [sitemap()],

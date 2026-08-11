@@ -42,5 +42,5 @@ HTML is human-readable (multi-line; ≥20 lines after layout expansion), enablin
 
 - `src/components/SeoHead.astro` provides the `<slot name="head" />` content.
 - Page `src/pages/journals/[journal_initials]/[slug].astro` fills the default slot with the article body.
-- `astro.config.mjs` provides the per-domain `site: 'https://amssrn.org'` used downstream.
+- `astro.config.mjs` provides the per-domain `site: 'https://amssr.org'` used downstream.
 - Tier-4 E2E in `e2e_tests/e2e_1.0_article_landing_page.js` asserts ordering and presence of these elements.

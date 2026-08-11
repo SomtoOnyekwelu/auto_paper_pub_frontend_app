@@ -20,12 +20,12 @@ Inputs:
   - P9 external pdf URL → Zod throws (regex enforces local-looking).
   - P10 `citation_publication_date: "2026/7/20"` (valid) — passes through verbatim.
 
-- `Astro.site?: URL` — from `site: 'https://amssrn.org'` in `astro.config.mjs`. Drives absolute-URL derivation.
+- `Astro.site?: URL` — from `site: 'https://amssr.org'` in `astro.config.mjs`. Drives absolute-URL derivation.
 
 ## Phase 2 — Conceptual Mapping (domain insights)
 
-- `citation_pdf_url` is stored RELATIVE (`/journals/.../galley.pdf`) so the rendered page stays in the same subdirectory (Google Scholar rule), but the Highwire meta tag content MUST be ABSOLUTE (`https://amssrn.org/journals/...`).
-- The domain is a single source of truth: `site:` in `astro.config.mjs`. Hand-Sanitizer: never hardcode "https://amssrn.org" inside any component.
+- `citation_pdf_url` is stored RELATIVE (`/journals/.../galley.pdf`) so the rendered page stays in the same subdirectory (Google Scholar rule), but the Highwire meta tag content MUST be ABSOLUTE (`https://amssr.org/journals/...`).
+- The domain is a single source of truth: `site:` in `astro.config.mjs`. Hand-Sanitizer: never hardcode "https://amssr.org" inside any component.
 - One `<meta>` per author (`citation_author`), per ORCID (`citation_author_orcid`), per institution (`citation_author_institution`). Never comma-joined (Part 10 §B). Array parallelism is enforced upstream by paperSchema.
 - Date is preserved verbatim: store `YYYY/M/D`, emit `YYYY/M/D` (Part 10 §C).
 
