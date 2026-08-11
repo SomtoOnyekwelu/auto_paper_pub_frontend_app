@@ -28,3 +28,9 @@ Tracks features deferred to keep MVP 1 focused on indexing fidelity + article pu
 
 ## 7. Interactive Editorial / Submission Dashboards
 - **Reason:** Out of scope. The Python backend processes DOCX → PDF/HTML; this frontend is strictly a public-facing reader interface.
+
+## 8. Build-Time Validation of `citation_pdf_url` Against the `astro.config.mjs` Domain
+- **Proposed by:** `security-review-agent` (2026-08-11, during the URL-rename/rollback review — recorded in the shared vigilance folder `latest_state_of_understanding/security-review_url-rename-rollback_2026-08-11.md`).
+- **Insight:** The `site:` string in `astro.config.mjs` is a single source of truth (Hand Sanitizer), but there is **no build-time validation** that all `citation_pdf_url` values resolve to absolute URLs under that domain. The E2E script catches this post-build. A build-time Zod check on the papers collection could catch malformed URLs earlier (shift-left).
+- **Status:** **Deferred** (not in this scope — the rename is committed and e2e guards the behavior).
+- **Revisit:** When the papers-collection Zod schema next changes, or if a malformed URL reaches the crawler, add a build-time assertion that every `citation_pdf_url` is absolute and under the configured `site:` origin.
