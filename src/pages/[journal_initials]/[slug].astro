@@ -12,12 +12,12 @@
  *   utils/papers, components/SeoHead, layouts/Layout.
  * ====================================================================
  */
-import Layout from '../../../layouts/Layout.astro';
-import SeoHead from '../../../components/SeoHead.astro';
-import { getJournal, journals } from '../../../lib/journals';
+import Layout from '../../layouts/Layout.astro';
+import SeoHead from '../../components/SeoHead.astro';
+import { getJournal, journals } from '../../lib/journals';
 import { getCollection } from 'astro:content';
-import { articleUrl, pdfUrl } from '../../../utils/papers';
-import type { Paper } from '../../../lib/schemas';
+import { articleUrl, pdfUrl } from '../../utils/papers';
+import type { Paper } from '../../lib/schemas';
 
 export async function getStaticPaths() {
   const papers = await getCollection('papers');

@@ -10,11 +10,11 @@
  * DEPENDENCY RULE: lib/journals, content collection, utils/papers.
  * ====================================================================
  */
-import Layout from '../../../layouts/Layout.astro';
-import { getJournal, journals } from '../../../lib/journals';
+import Layout from '../../layouts/Layout.astro';
+import { getJournal, journals } from '../../lib/journals';
 import { getCollection } from 'astro:content';
-import type { Paper } from '../../../lib/schemas';
-import { articleUrl } from '../../../utils/papers';
+import type { Paper } from '../../lib/schemas';
+import { articleUrl } from '../../utils/papers';
 
 export async function getStaticPaths() {
   return journals.map((j) => ({ params: { journal_initials: j.initials } }));
