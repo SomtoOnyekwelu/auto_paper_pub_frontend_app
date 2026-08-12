@@ -25,6 +25,10 @@ const faviconHref = baseUrl + "favicon.svg";
 const canonicalHref = Astro.site
   ? new URL(Astro.url.pathname, Astro.site.origin).href
   : Astro.url.href;
+// Verified 2026-08-12: new URL(path, Astro.site).pathname does NOT get
+// base-prefixed (logo emitted as /assets/... not /journals/assets/...).
+// Keep orgLogoUrl as-is (brand asset lives at the site root, not under /journals).
+const orgLogoHref = orgLogoUrl;
 
 function toCssVarDecls(vars: Record<string, string>) {
   return Object.entries(vars)
@@ -52,7 +56,7 @@ const cssVarsCss =
   <body class="min-h-screen bg-white text-gray-900 font-sans antialiased">
     <header class="max-w-3xl mx-auto px-6 pt-6 pb-2">
       <a href="/journals/" aria-label="AMSSRN — Journals">
-        <img src={orgLogoUrl} alt="AMSSRN" class="h-12 w-auto" />
+        <img src={orgLogoHref} alt="AMSSRN" class="h-12 w-auto" />
    </a>
  </header>
     <slot />
