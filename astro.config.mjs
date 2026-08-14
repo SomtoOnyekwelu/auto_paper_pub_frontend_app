@@ -3,13 +3,20 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// NOTE: no `base: '/journals'` — that + src/pages/journals/* would yield
-// /journals/journals/... and break the data-contract URLs. The host routes
-// /journals/* here and / to the parent org (out of scope). See challenge 1.0.
+// NOTE: pages live at src/pages/* (moved up one level from src/pages/journals/*),
+// and `base: '/journals'` prefixes every emitted asset URL. Option A (mentor
+// approved 2026-08-12): keep base + fix hardcoded refs via import.meta.env.BASE_URL.
+// trailingSlash: 'always' is a HARD constraint for Cloudflare Pages — Pages
+// 301-redirects slashless folder paths, and trailingSlash:'never' would create
+// an infinite redirect loop with the Worker proxy. Verified: new URL(path,
+// Astro.site).pathname does NOT get base-prefixed (logo emitted /assets/...),
+// so hardcoded refs use BASE_URL instead.
 // NOTE: framework is Astro 7 (installed), not the brief's "Astro v5"; SSG /
 // Content-Layer / Zod APIs are stable across 5→7.
 export default defineConfig({
   site: 'https://amssr.org',
+  base: '/journals',
+  trailingSlash: 'always', // Cloudflare Pages compat (prevents redirect loop)
   output: 'static',
   compressHTML: false, // human-readable output for review/debug (Part 4B); negligible size cost
   integrations: [sitemap()],
