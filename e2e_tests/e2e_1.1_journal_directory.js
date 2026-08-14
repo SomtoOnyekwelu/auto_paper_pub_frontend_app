@@ -19,14 +19,14 @@ function assert(cond, message) {
 }
 
 console.log('\n[1] Directory + every archive page exists...');
-assert(existsSync(resolve(DIST, 'index.html')), '/journals/ exists');
+assert(existsSync(resolve(DIST, 'journals/index.html')), '/journals/ exists');
 ['grjbm','grjaf','grjesd','grjhpa'].forEach(initials => {
-  assert(existsSync(resolve(DIST, `${initials}/index.html`)),
+  assert(existsSync(resolve(DIST, `journals/${initials}/index.html`)),
     `/journals/${initials}/ archive page exists`);
 });
 
 console.log('\n[2] Directory lists all four journals by name...');
-const dir = readFileSync(resolve(DIST, 'index.html'), 'utf-8');
+const dir = readFileSync(resolve(DIST, 'journals/index.html'), 'utf-8');
 const expectedNames = [
   'Global Research Journal of Business Management',
   'Global Research Journal of Accounting and Finance',
@@ -36,7 +36,7 @@ const expectedNames = [
 for (const name of expectedNames) assert(dir.includes(name), `directory mentions: ${name}`);
 
 console.log('\n[3] Each archive page links to its papers via a plain <a>...');
-const grjbm = readFileSync(resolve(DIST, 'grjbm/index.html'), 'utf-8');
+const grjbm = readFileSync(resolve(DIST, 'journals/grjbm/index.html'), 'utf-8');
 // ArticleUrl helper returns path with trailing slash. Test both forms so the
 // assertion stays robust to future URL-helper refactors.
 assert(grjbm.includes('<a href="/journals/grjbm/8492-monetary-policy-finance/"')
@@ -44,7 +44,7 @@ assert(grjbm.includes('<a href="/journals/grjbm/8492-monetary-policy-finance/"')
   'grjbm archive links to article 8492 via plain <a>');
 
 console.log('\n[4] Strict filter — grjesd archive lists ONLY grjesd papers...');
-const grjesd = readFileSync(resolve(DIST, 'grjesd/index.html'), 'utf-8');
+const grjesd = readFileSync(resolve(DIST, 'journals/grjesd/index.html'), 'utf-8');
 // ArticleUrl helper returns path with trailing slash (route index.astro shape).
 // Test both forms so the assertion survives URL-helper formatting changes.
 assert(grjesd.includes('/journals/grjesd/1045-fiscal-policy-social-progress/')
@@ -53,14 +53,14 @@ assert(grjesd.includes('/journals/grjesd/1045-fiscal-policy-social-progress/')
 assert(!grjesd.includes('/journals/grjbm/8492-monetary-policy-finance'),
   'grjesd archive does NOT leak grjbm papers');
 
-console.log('\n[5] Empty-archive edge case — grjaf has zero papers yet...');
-const grjaf = readFileSync(resolve(DIST, 'grjaf/index.html'), 'utf-8');
-assert(grjaf.includes('No articles published yet'),
-  'grjaf archive shows "No articles published yet." empty-state placeholder');
+console.log('\n[5] Empty-archive edge case — grjhpa has zero papers...');
+const grjhpa = readFileSync(resolve(DIST, 'journals/grjhpa/index.html'), 'utf-8');
+assert(grjhpa.includes('No articles published yet'),
+  'grjhpa archive shows "No articles published yet." empty-state placeholder');
 
 console.log('\n[6] Crawler-friendly plain HTML links (no JS routing)...');
 for (const initials of ['grjbm','grjaf','grjesd','grjhpa']) {
-  const html = readFileSync(resolve(DIST, `${initials}/index.html`), 'utf-8');
+  const html = readFileSync(resolve(DIST, `journals/${initials}/index.html`), 'utf-8');
   assert(html.includes(`<a href="/journals/`), `${initials} archive uses plain <a href> paths`);
 }
 

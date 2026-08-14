@@ -19,20 +19,16 @@ interface Props {
 const props = Astro.props;
 const theme: Theme =
   props.journalInitials ? getTheme(props.journalInitials) : DEFAULT_THEME;
-// base-aware asset prefix: with base='/journals' + trailingSlash:'always',
-// BASE_URL = '/journals/' (Astro guarantees the trailing slash per config).
-// Slash-safe join: strip any trailing slash then re-add, so it works whether
-// BASE_URL ends with '/' or not.
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
-const faviconHref = baseUrl + "/favicon.svg";
+// NO astro base (2026-08-12): pages live at src/pages/journals/* so routes are
+// /journals/*, and asset URLs stay root-relative (/assets/*, /favicon.svg).
+// The Cloudflare _redirects 200-rewrites /journals/assets/* -> /assets/* so the
+// Worker's /journals/-prefixed fetches resolve. Canonical = site + pathname
+// (Astro.url.pathname already carries /journals/ from the route).
+const faviconHref = "/favicon.svg";
 const canonicalHref = Astro.site
-  ? new URL(Astro.url.pathname, Astro.site.origin).href
+  ? new URL(Astro.url.pathname, Astro.site).href
   : Astro.url.href;
-// orgLogoUrl is '/assets/logos/amssrn-logo-512.png' (root-relative). With
-// base='/journals' the browser must fetch '/journals/assets/...' — prefix it
-// with BASE_URL (new URL(path, Astro.site).pathname does NOT do this; verified
-// 2026-08-12).
-const orgLogoHref = baseUrl + orgLogoUrl;
+const orgLogoHref = orgLogoUrl;
 
 function toCssVarDecls(vars: Record<string, string>) {
   return Object.entries(vars)

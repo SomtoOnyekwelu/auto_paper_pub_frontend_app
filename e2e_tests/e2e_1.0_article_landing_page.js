@@ -22,10 +22,10 @@ function assert(cond, message) {
 }
 
 console.log('\n[1] Build output exists...');
-assert(existsSync(resolve(DIST, 'grjbm/8492-monetary-policy-finance/index.html')),
+assert(existsSync(resolve(DIST, 'journals/grjbm/8492-monetary-policy-finance/index.html')),
   'Article landing HTML for grjbm 8492 exists');
 
-const html = readFileSync(resolve(DIST, 'grjbm/8492-monetary-policy-finance/index.html'), 'utf-8');
+const html = readFileSync(resolve(DIST, 'journals/grjbm/8492-monetary-policy-finance/index.html'), 'utf-8');
 const headSection = html.split('</head>')[0] || '';
 const bodySection = html.split('<body')[1] || '';
 

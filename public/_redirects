@@ -7,3 +7,16 @@
 # The browser-crawler never leaves the same subdirectory (Part 10 Google Scholar
 # rule satisfied), Git stays clean (no binaries tracked), and the download link
 # gives instant PDF access from R2.
+
+# --- Asset rewrites (200 proxy, NOT 301 — SEO-neutral, no redirect chain) ---
+# Pages serves static files from dist/. With NO astro `base`, the pages live at
+# dist/journals/* (matching the Worker's /journals/* fetches), but Astro emits
+# ROOT-relative asset URLs (/assets/*, /favicon.svg, /_astro/*). The Worker
+# fetches them as /journals/assets/* (address-bar origin amssr.org). These 200
+# rewrites map /journals/assets/* back to the real /assets/* files so the
+# styles/logos/favicon resolve under the proxy.
+/journals/assets/*   /assets/:splat   200
+/journals/_astro/*   /_astro/:splat   200
+/journals/favicon.svg  /favicon.svg   200
+/journals/favicon.ico  /favicon.ico   200
+/journals/robots.txt   /robots.txt    200
