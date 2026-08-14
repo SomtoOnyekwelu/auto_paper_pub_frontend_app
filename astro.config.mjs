@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { PUBLIC_ASSET_PREFIX } from './deployment-config.mjs';
 
 // NOTE: pages live at src/pages/journals/* so the DIST LAYOUT is
 // dist/journals/* — matching the Cloudflare Worker's /journals/* fetch paths.
@@ -21,7 +22,7 @@ export default defineConfig({
   output: 'static',
   compressHTML: false, // human-readable output for review/debug (Part 4B); negligible size cost
   build: {
-    assetsPrefix: '/journals',
+    assetsPrefix: PUBLIC_ASSET_PREFIX,
   },
   integrations: [sitemap()],
   vite: {

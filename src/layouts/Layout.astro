@@ -8,7 +8,7 @@
 // DEPENDENCY: lib/themes.
 import "../styles/global.css";
 import { getTheme, DEFAULT_THEME, type Theme } from "../lib/themes";
-import { orgLogoUrl } from "../config/brand";
+import { orgLogoUrl, PUBLIC_ASSET_PREFIX } from "../config/brand";
 
 interface Props {
   journalInitials?: string;
@@ -20,11 +20,13 @@ const props = Astro.props;
 const theme: Theme =
   props.journalInitials ? getTheme(props.journalInitials) : DEFAULT_THEME;
 // NO astro base (2026-08-12): pages live at src/pages/journals/* so routes are
-// /journals/*, and asset URLs stay root-relative (/assets/*, /favicon.svg).
-// The Cloudflare _redirects 200-rewrites /journals/assets/* -> /assets/* so the
-// Worker's /journals/-prefixed fetches resolve. Canonical = site + pathname
-// (Astro.url.pathname already carries /journals/ from the route).
-const faviconHref = "/favicon.svg";
+// /journals/*. Bundled CSS/JS are prefixed by build.assetsPrefix (which must
+// equal PUBLIC_ASSET_PREFIX). public/ assets (favicon, logo) are NOT covered by
+// assetsPrefix, so they are derived from the same PUBLIC_ASSET_PREFIX single
+// source of truth; public/_redirects 200-rewrites /journals/assets/* ->
+// /assets/* (and /journals/favicon.svg -> /favicon.svg). Canonical = site +
+// pathname (Astro.url.pathname already carries /journals/ from the route).
+const faviconHref = PUBLIC_ASSET_PREFIX + "/favicon.svg";
 const canonicalHref = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : Astro.url.href;
