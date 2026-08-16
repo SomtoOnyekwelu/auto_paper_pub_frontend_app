@@ -1,0 +1,53 @@
+---
+/**
+ * ====================================================================
+ * CHALLENGE SPACE: SocialMeta — OG / Twitter Card link-preview metadata
+ * =====================================================================
+ * PURPOSE: Emit OpenGraph + Twitter Card meta tags so that link previews
+ *   on WhatsApp, Facebook, and Twitter/X show the AMSSRN logo and a
+ *   proper title/description instead of a bare URL. This is a NEW,
+ *   separate component — SeoHead.astro is Highwire/Google-Scholar-specific
+ *   and MUST NOT be overloaded with OG tags.
+ * INCLUSION CRITERIA: og:type, og:title, og:description, og:url (absolute),
+ *   og:image (absolute, from ogImageUrl in brand.ts), og:site_name ("AMSSRN"),
+ *   twitter:card (summary_large_image), twitter:title, twitter:description,
+ *   twitter:image.
+ * EXCLUSION CRITERIA: Highwire citation_* tags (SeoHead.astro owns those);
+ *   body content; CSS theming.
+ * DEPENDENCY RULE: Imports absoluteSiteUrl + socialImageUrl from utils/seo,
+ *   ogImageUrl from config/brand. No page imports.
+ * ====================================================================
+ */
+import { absoluteSiteUrl, socialImageUrl } from '../utils/seo';
+
+interface Props {
+  /** 'article' for paper pages, 'website' for archive/directory pages. */
+  type: 'article' | 'website';
+  /** og:title / twitter:title — the page headline. */
+  title: string;
+  /** og:description / twitter:description — the page summary. */
+  description: string;
+  /** Root-relative URL path WITH the single /journals/ prefix (from Astro.url.pathname). */
+  url: string;
+}
+
+const { type, title, description, url } = Astro.props;
+const site = Astro.site?.href ?? '';
+
+// Absolute URLs derived from Astro.site — NEVER hardcode the domain.
+// absoluteSiteUrl uses new URL(path, base) which replaces the path entirely,
+// guaranteeing exactly one /journals/ prefix (no double-prefixing).
+const absoluteUrl = site ? absoluteSiteUrl(url, site) : url;
+const img = site ? socialImageUrl(site) : '';
+---
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={absoluteUrl} />
+<meta property="og:image" content={img} />
+<meta property="og:site_name" content="AMSSRN" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={img} />

@@ -11,10 +11,12 @@
  * ====================================================================
  */
 import Layout from '../../layouts/Layout.astro';
+import SocialMeta from '../../components/SocialMeta.astro';
 import { journals } from '../../lib/journals';
 import { journalArchiveUrl } from '../../utils/papers';
 ---
 <Layout title="Journals — AMSSRN" description="Directory of AMSSRN academic journals.">
+  <SocialMeta slot="head" type="website" title="Journals — AMSSRN" description="Directory of AMSSRN academic journals." url={Astro.url.pathname} />
   <main class="max-w-3xl mx-auto px-6 py-12">
     <h1 class="text-3xl font-bold font-serif mb-8">Journals</h1>
     <ul class="space-y-6">

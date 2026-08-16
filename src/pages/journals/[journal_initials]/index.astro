@@ -11,6 +11,7 @@
  * ====================================================================
  */
 import Layout from '../../../layouts/Layout.astro';
+import SocialMeta from '../../../components/SocialMeta.astro';
 import { getJournal, journals } from '../../../lib/journals';
 import { getCollection } from 'astro:content';
 import type { Paper } from '../../../lib/schemas';
@@ -29,6 +30,7 @@ const papers = all
   .sort((a, b) => b.data.highwire_tags.citation_publication_date.localeCompare(a.data.highwire_tags.citation_publication_date));
 ---
 <Layout journalInitials={journal_initials} title={`${journal.name} — Archive`} description={journal.description}>
+  <SocialMeta slot="head" type="website" title={`${journal.name} — Archive`} description={journal.description} url={Astro.url.pathname} />
   <main class="max-w-3xl mx-auto px-6 py-12">
     <a href="/journals/" class="text-sm text-gray-500 hover:underline">← All journals</a>
     <h1 class="text-3xl font-bold font-serif mt-4 mb-2">{journal.name}</h1>

@@ -14,9 +14,10 @@
  */
 import Layout from '../../../layouts/Layout.astro';
 import SeoHead from '../../../components/SeoHead.astro';
+import SocialMeta from '../../../components/SocialMeta.astro';
 import { getJournal, journals } from '../../../lib/journals';
 import { getCollection } from 'astro:content';
-import { articleUrl, pdfUrl } from '../../../utils/papers';
+import { articleUrl, pdfUrl, journalArchiveUrl } from '../../../utils/papers';
 import type { Paper } from '../../../lib/schemas';
 
 export async function getStaticPaths() {
@@ -35,10 +36,11 @@ const journal = getJournal(paper.journal_initials);
 const highwire = paper.highwire_tags;
 const fullAuthors = paper.authors;
 const pdfHref = pdfUrl(paper.journal_initials, paper.slug);
-const archiveHref = `/journals/${paper.journal_initials}/`;
+const archiveHref = journalArchiveUrl(paper.journal_initials);
 ---
 <Layout journalInitials={paper.journal_initials} title={paper.title} description={highwire.citation_abstract}>
   <SeoHead slot="head" tags={highwire} />
+  <SocialMeta slot="head" type="article" title={paper.title} description={highwire.citation_abstract} url={Astro.url.pathname} />
   <main class="max-w-prose mx-auto px-6 py-12">
     <a href={archiveHref} class="text-sm text-gray-500 hover:underline">{journal.name}</a>
 

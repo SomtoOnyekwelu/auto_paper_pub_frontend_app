@@ -32,6 +32,15 @@ export { PUBLIC_ASSET_PREFIX };
 export const orgLogoUrl =
   PUBLIC_ASSET_PREFIX + "/assets/logos/amssrn-logo-512.png";
 
+// --- Challenge 6: Social link-preview image (OG / Twitter Card) ---
+// Stable 1200×630 PNG served under /journals/assets/social/. The _redirects
+// 200-rewrite /journals/assets/* -> /assets/* already covers this path —
+// no new redirect rule. Derive from PUBLIC_ASSET_PREFIX (single source of
+// truth) so the domain rename or proxy subpath never drifts here.
+// NEVER hardcode the path inline in a component — import this const.
+export const ogImageUrl =
+  PUBLIC_ASSET_PREFIX + "/assets/social/amssrn-og.png";
+
 // Future home for org-level brand config (palette, typography baseline)
 // if/when centralization becomes necessary. Today this file ONLY holds
-// the logo path so there's exactly ONE place to change.
+// the logo path and the OG image path so there's exactly ONE place to change.
