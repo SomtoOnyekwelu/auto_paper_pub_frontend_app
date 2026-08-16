@@ -67,6 +67,16 @@ for (const initials of ['grjbm','grjaf','grjesd','grjhpa']) {
 console.log('\n[7] AMSSRN org logo present on directory + archive pages (Task 4 coverage)...');
 assert(dir.includes('amssrn-logo-512.png'),
   'Directory renders AMSSRN org logo');
+
+console.log('\n[7b] Social/OG meta (Challenge 6) — directory + archive use og:type=website...');
+const dirHead = dir.split('</head>')[0] || '';
+const grjbmHead = grjbm.split('</head>')[0] || '';
+assert(dirHead.includes('property="og:type" content="website"'), 'directory og:type is website');
+assert(grjbmHead.includes('property="og:type" content="website"'), 'archive og:type is website');
+assert(dirHead.includes('property="og:site_name" content="AMSSRN"'), 'directory og:site_name is AMSSRN');
+const dirOgUrl = dir.match(/property="og:url" content="([^"]+)"/);
+assert(dirOgUrl && dirOgUrl[1].startsWith('https://'), 'directory og:url is absolute');
+assert(!dirOgUrl?.[1].includes('/journals/journals/'), 'directory og:url has no double prefix');
 assert(grjbm.includes('amssrn-logo-512.png'),
   'grjbm archive renders AMSSRN org logo');
 

@@ -42,6 +42,23 @@ for (const n of tagNames) {
   assert(!bodySection.includes(`name="${n}"`), `${n} is NOT in <body>`);
 }
 
+console.log('\n[2b] Social/OG meta tags (Challenge 6) are in <head>...');
+const ogProps = ['og:type', 'og:title', 'og:description', 'og:url', 'og:image', 'og:site_name'];
+for (const p of ogProps) {
+  assert(headSection.includes(`property="${p}"`), `${p} is in <head>`);
+  assert(!bodySection.includes(`property="${p}"`), `${p} is NOT in <body>`);
+}
+assert(headSection.includes('property="og:type" content="article"'), 'og:type is article on the article page');
+assert(headSection.includes('name="twitter:card" content="summary_large_image"'), 'twitter:card is summary_large_image');
+const ogUrlMatch = html.match(/property="og:url" content="([^"]+)"/);
+assert(ogUrlMatch && ogUrlMatch[1].startsWith('https://'), 'og:url is absolute');
+assert(!ogUrlMatch?.[1].includes('/journals/journals/'), 'og:url has no double /journals/ prefix');
+const ogImgMatch = html.match(/property="og:image" content="([^"]+)"/);
+assert(ogImgMatch && ogImgMatch[1].startsWith('https://'), 'og:image is absolute');
+assert(ogImgMatch?.[1].includes('/journals/assets/social/amssrn-og.png'), 'og:image points at the 1200x630 social asset');
+assert(headSection.includes('rel="icon" type="image/x-icon"'), 'favicon.ico fallback link is present');
+assert(headSection.includes('rel="icon" type="image/svg+xml"'), 'favicon.svg link is present');
+
 console.log('\n[3] citation_pdf_url is absolute...');
 const pdfMatch = html.match(/name="citation_pdf_url" content="([^"]+)"/);
 assert(pdfMatch && pdfMatch[1].startsWith('https://'), `citation_pdf_url is absolute. Got: ${pdfMatch?.[1]}`);

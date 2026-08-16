@@ -24,9 +24,19 @@ function articlePath(): string { return '/journals/grjbm/8492-monetary-policy-fi
 // ===========================================================================
 
 describe('Tier 1 — Zero-Tolerance: absoluteSiteUrl guards', () => {
-  it('rejects a path that already has a double /journals/ prefix — never amplifies it', () => {
+  it('single-prefix input never yields a double prefix', () => {
     const result = absoluteSiteUrl(articlePath(), siteUrl());
     expect(result).not.toContain('/journals/journals/');
+    expect(result).toBe('https://amssr.org' + articlePath());
+  });
+
+  it('a genuinely double-prefixed input is not amplified further', () => {
+    // absoluteSiteUrl replaces the whole path with new URL(path, base); a
+    // double-prefixed input stays as-is (the invariant is never making it
+    // WORSE — the Tier-3 fuzzer covers the no-amplification property).
+    const input = '/journals/journals/grjbm/8492-monetary-policy-finance/';
+    const result = absoluteSiteUrl(input, siteUrl());
+    expect(result).toBe('https://amssr.org/journals/journals/grjbm/8492-monetary-policy-finance/');
   });
 
   it('handles site URL with trailing slash (no double-slash in origin)', () => {
