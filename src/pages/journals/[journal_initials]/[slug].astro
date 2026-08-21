@@ -56,7 +56,9 @@ const archiveHref = journalArchiveUrl(paper.journal_initials);
     {fullAuthors.map((a) => (
       <h3 class="text-lg font-sans font-semibold leading-snug">
         {a.name}
-        <a href={a.orcid} class="text-sm text-[var(--color-primary)] hover:underline font-normal" target="_blank" rel="noopener noreferrer">{a.orcid}</a>
+        {a.orcid && (
+          <a href={a.orcid} class="text-sm text-[var(--color-primary)] hover:underline font-normal" target="_blank" rel="noopener noreferrer">{a.orcid}</a>
+        )}
         <span class="text-sm text-gray-500 font-normal">· {a.affiliation}</span>
       </h3>
     ))}

@@ -50,7 +50,7 @@ const cssVarsCss =
     <link rel="icon" type="image/svg+xml" href={faviconHref} />
     <link rel="icon" type="image/x-icon" href={faviconIcoHref} />
     <link rel="canonical" href={canonicalHref} />
-    <title set:html={props.title} />
+    <title>{props.title}</title>
     {props.description && (
       <meta name="description" content={props.description} />
     )}

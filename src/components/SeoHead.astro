@@ -48,7 +48,7 @@ const absolutePdfUrl = siteOrigin
 {authors.map((a, i) => (
   <meta name="citation_author" content={a} />
 ))}
-{orcids.map((o) => (
+{orcids.filter((o): o is string => o !== null).map((o) => (
   <meta name="citation_author_orcid" content={o} />
 ))}
 {institutions.map((inst) => (

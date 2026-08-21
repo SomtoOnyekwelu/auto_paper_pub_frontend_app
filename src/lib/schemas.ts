@@ -65,7 +65,9 @@ export type Theme = z.infer<typeof themeSchema>;
 export const authorSchema = z.object({
   name: z.string().min(1, 'author name is required'),
   author_slug: z.string().min(1, 'author_slug is required'),
-  orcid: z.string().regex(ORCID_RE, 'author orcid must be full URL https://orcid.org/...'),
+  // C14: ORCID is optional. Null is valid absence; a supplied value must be
+  // the canonical full URL.
+  orcid: z.string().regex(ORCID_RE, 'author orcid must be full URL https://orcid.org/...').nullable(),
   affiliation: z.string().min(1, 'author affiliation is required'),
 });
 export type Author = z.infer<typeof authorSchema>;
@@ -85,7 +87,9 @@ export const highwireSchema = z
     citation_abstract: z.string().min(1, 'citation_abstract is required'),
     citation_keywords: z.array(z.string().min(1)).min(1, 'citation_keywords must have >= 1 item'),
     citation_author: z.array(z.string().min(1)).min(1, 'citation_author must have >= 1 author'),
-    citation_author_orcid: z.array(z.string().regex(ORCID_RE, 'citation_author_orcid entries must be full ORCID URLs')).min(1),
+    // C14: ORCID is optional — entries may be null (position-parallel with
+    // authors); a supplied value must be the canonical full URL.
+    citation_author_orcid: z.array(z.string().regex(ORCID_RE, 'citation_author_orcid entries must be full ORCID URLs').nullable()).min(1),
     citation_author_institution: z.array(z.string().min(1)).min(1),
   })
   .refine(
